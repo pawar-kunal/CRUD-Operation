@@ -24,12 +24,12 @@ public class UserServiceImpl implements UserService {
     public UserResponse create(UserRequest userRequest) {
         UserResponse userResponse = new UserResponse();
         User user = new User();
-        BeanUtils.copyProperties(user,userRequest);
+        BeanUtils.copyProperties(userRequest,user);
         user.setStatus("Active");
         user.setDate(new Date());
         try {
              User createdUser= userRepository.save(user);
-             BeanUtils.copyProperties(userResponse,createdUser);
+             BeanUtils.copyProperties(createdUser,userResponse);
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -38,16 +38,17 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public MainResponse update(UserRequest userRequest) {
+        System.out.println("re = "+userRequest);
         MainResponse mainResponse = new MainResponse();
 
         Optional<User> user = this.userRepository.findById(userRequest.getUserId());
 
         if (user.isPresent()){
-            BeanUtils.copyProperties(user,userRequest);
+            BeanUtils.copyProperties(userRequest,user.get());
             user.get().setDate(new Date());
-            user.get().setStatus("Active");
             try {
                 userRepository.save(user.get());
+                System.out.println("update");
                 mainResponse.setMessage("User updated successfully");
                 mainResponse.setFlag(true);
                 mainResponse.setResponseCode(HttpStatus.OK.value());
@@ -71,7 +72,7 @@ public class UserServiceImpl implements UserService {
         Optional<User> user = this.userRepository.findById(userId);
 
         if (user.isPresent()){
-            BeanUtils.copyProperties(userResponse,user);
+            BeanUtils.copyProperties(user.get(),userResponse);
         }
         return userResponse;
     }
