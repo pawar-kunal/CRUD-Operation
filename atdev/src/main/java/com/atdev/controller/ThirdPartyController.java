@@ -30,4 +30,14 @@ public class ThirdPartyController {
     public Map<String,Object> addPost(@RequestBody Map<String,Object> payload){
         return thirdPartyService.addPost(payload);
     }
+
+    @PutMapping("/updatepost/{id}")
+    public Map<String, Object> updatePost(@RequestBody Map<String, Object> payload,@PathVariable("id") Integer id){
+        return thirdPartyService.updatePost(payload,id);
+    }
+
+    @DeleteMapping("/deletepost/{id}")
+    public Map<String, Object> deleteById(@PathVariable("id") Integer id){
+        return thirdPartyService.deleteById(id);
+    }
 }

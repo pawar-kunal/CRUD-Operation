@@ -22,9 +22,10 @@ public class ThirdPartyServiceImpl implements ThirdPartyService {
 
     String baseUrl = "https://jsonplaceholder.typicode.com/";
     StringBuilder stringBuilder = new StringBuilder(baseUrl);
+    String POST = "posts";
     @Override
     public List<Map<String, Object>> getPosts() {
-        String POST = "posts";
+
         String url = stringBuilder.append(POST).toString();
         HttpEntity <Void> httpEntity = new HttpEntity<>(getHttpHeaders());
         val response =  restTemplate.exchange(url, HttpMethod.GET, httpEntity, List.class);
@@ -42,10 +43,29 @@ public class ThirdPartyServiceImpl implements ThirdPartyService {
 
     @Override
     public Map<String, Object> addPost(Map<String, Object> payload) {
-        String POST = "posts/";
         String url = stringBuilder.append(POST).toString();
         HttpEntity <Map> httpEntity = new HttpEntity<>(payload,getHttpHeaders());
         val response =  restTemplate.exchange(url, HttpMethod.POST, httpEntity, Map.class);
+        return response.getBody();
+    }
+
+    @Override
+    public Map<String, Object> updatePost(Map<String, Object> payload, Integer id) {
+        String POST = "posts/";
+        String url = stringBuilder.append(POST).append(id).toString();
+        HttpEntity <Map> httpEntity = new HttpEntity<>(payload,getHttpHeaders());
+        val response =  restTemplate.exchange(url, HttpMethod.PUT, httpEntity, Map.class);
+        System.out.println("response "+response);
+        return response.getBody();
+    }
+
+    @Override
+    public Map<String, Object> deleteById(Integer id) {
+        String POST = "posts/";
+        String url = stringBuilder.append(POST).append(id).toString();
+        HttpEntity <Map> httpEntity = new HttpEntity<>(getHttpHeaders());
+        val response =  restTemplate.exchange(url, HttpMethod.DELETE, httpEntity, Map.class);
+        System.out.println("response "+response);
         return response.getBody();
     }
 
